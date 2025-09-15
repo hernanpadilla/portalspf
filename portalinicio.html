@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link href="img/spf_favicon.png" rel="icon">
+  <title>Portal de Módulos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      background: #eee;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      background: #254d79;
+      color: #fff;
+      padding: 30px 0 10px 0;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.2em;
+      letter-spacing: 3px;
+    }
+    .modules {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 40px 0;
+      gap: 32px;
+    }
+    .module-btn {
+      background: #fff;
+      border: 1px solid #bbb;
+      border-radius: 12px;
+      min-width: 200px;
+      min-height: 110px;
+      box-shadow: 0 4px 18px #0e427a15;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      padding: 16px 22px;
+      transition: box-shadow .2s, transform .2s;
+      position: relative;
+    }
+    .module-btn:hover {
+      box-shadow: 0 4px 30px #0e224a33;
+      transform: translateY(-4px) scale(1.025);
+      border-color: #409;
+    }
+    .module-tower {
+      width: 46px;
+      height: 60px;
+      margin-bottom: 8px;
+      display: block;
+      object-fit: contain;
+      /* Center IMG */
+      align-self: center;
+    }
+    .module-label {
+      font-size: 1.15em;
+      font-weight: bold;
+      color: #133356;
+      text-align: center;
+    }
+    .back-btn {
+      position: fixed;
+      top: 18px;
+      left: 10px;
+      background: #dde3f4;
+      color: #223c60;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 18px;
+      font-size: 1.1em;
+      cursor: pointer;
+      display: none;
+      z-index: 10;
+      box-shadow: 0 2px 8px #254d7922;
+    }
+    .content {
+      max-width: 720px;
+      margin: 35px auto;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 2px 12px #2a3b6217;
+      padding: 36px;
+      color: #233652;
+      min-height: 200px;
+      display: none;
+      font-size: 1.15em;
+    }
+    @media (max-width: 750px) {
+      .modules {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0 20px 0;
+      }
+      .content { padding: 18px; min-height: 130px;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Portal de Módulos</h1>
+    <div style="font-size:1.18em;margin-top:6px;opacity:0.83;">
+      Selecciona un módulo para ingresar
+    </div>
+  </header>
+
+  <button class="back-btn" onclick="showHome()">← Volver a módulos</button>
+  
+  <main>
+    <section class="modules" id="modules">
+      <button class="module-btn" onclick="showModule('despacho')">
+        <img class="module-tower" src="img/spf_favicon.png" alt="Torreón">
+        <span class="module-label">Despacho</span>
+      </button>
+      <button class="module-btn" onclick="showModule('gde')">
+        <img class="module-tower" src="img/spf_favicon.png" alt="Torreón">
+        <span class="module-label">Gde</span>
+      </button>
+      <button class="module-btn" onclick="showModule('lpu')">
+        <img class="module-tower" src="img/spf_favicon.png" alt="Torreón">
+        <span class="module-label">Lpu</span>
+      </button>
+    </section>
+
+    <section class="content" id="despacho-content">
+      <h2>Módulo Despacho</h2>
+      <p>
+        Aquí puedes acceder a todos los temas relacionados con <b>Despacho</b>.<br>
+        <br>
+        <b>Temas disponibles:</b>
+        <ul>
+          <li>Seguimiento de casos de despacho</li>
+          <li>Lista de tareas por usuario</li>
+          <li>Reportes mensuales</li>
+        </ul>
+      </p>
+    </section>
+    <section class="content" id="gde-content">
+      <h2>Módulo Gde</h2>
+      <p>
+        Este módulo reúne temas y recursos para <b>Gde</b>.<br>
+        <br>
+        <b>Temas disponibles:</b>
+        <ul>
+          <li>Gestión documental de expedientes</li>
+          <li>Normativa y plantillas</li>
+          <li>Procesos de aprobación</li>
+        </ul>
+      </p>
+    </section>
+    <section class="content" id="lpu-content">
+      <h2>Módulo Lpu</h2>
+      <p>
+        Accede a los recursos de <b>Lpu</b> para mejorar tu productividad.<br>
+        <br>
+        <b>Temas disponibles:</b>
+        <ul>
+          <li>Guía rápida de uso</li>
+          <li>Preguntas frecuentes</li>
+          <li>Soporte en línea</li>
+        </ul>
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const moduleIds = ["despacho", "gde", "lpu"];
+    function showModule(module) {
+      document.getElementById("modules").style.display = "none";
+      moduleIds.forEach(id => {
+        document.getElementById(id+"-content").style.display = (id === module) ? "block" : "none";
+      });
+      document.querySelector(".back-btn").style.display = "block";
+    }
+    function showHome() {
+      document.getElementById("modules").style.display = "flex";
+      moduleIds.forEach(id => {
+        document.getElementById(id+"-content").style.display = "none";
+      });
+      document.querySelector(".back-btn").style.display = "none";
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+  </script>
+</body>
+</html>
