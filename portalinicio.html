@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
+  <link href="img/spf_favicon.png" rel="icon">
   <title>Portal de Módulos</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
@@ -47,18 +48,13 @@
         <span class="module-label">Lpu</span>
       </button>
 
-      <button class="module-btn" onclick="showModule('telefono')">
-        <img class="module-tower" src="img/spf_favicon" alt="Teléfono">
-        <span class="module-label">Teléfono</span>
-      </button>
-
       <button class="module-btn" onclick="showModule('telefonos-spf')">
         <img class="module-tower" src="img/spf_favicon" alt="Teléfonos SPF">
         <span class="module-label">Teléfonos SPF</span>
       </button>
     </section>
 
-    <!-- Contenidos de módulos existentes (ejemplo mínimos) -->
+    <!-- Contenidos de módulos locales -->
     <section id="despacho-content" class="content">
       <h2>Módulo Despacho</h2>
       <p>Contenido de Despacho ...</p>
@@ -74,14 +70,13 @@
       <p>Contenido de Lpu ...</p>
     </section>
 
-    <!-- Secciones destino para páginas externas -->
-    <section id="telefono-content" class="content"><!-- telefono.html se cargará aquí --></section>
-    <section id="telefonos-spf-content" class="content"><!-- telefono.html u otra página se cargará aquí --></section>
+    <!-- Sección destino para telefono.html -->
+    <section id="telefonos-spf-content" class="content"></section>
 
   </main>
 
   <script>
-    // Comprobación de sesión (simple)
+    // Comprobación de sesión simple; redirige a login si no hay usuario
     if (!localStorage.getItem('login_usuario')) {
       window.location.href = 'login.html';
     }
@@ -91,58 +86,63 @@
       window.location.href='login.html';
     }
 
-    const moduleIds = ['despacho','gde','lpu','telefono','telefonos-spf'];
+    // Lista de módulos (sin "telefono")
+    const moduleIds = ['despacho','gde','lpu','telefonos-spf'];
 
     function hideAllContents(){
       document.querySelectorAll('.content').forEach(c => c.style.display='none');
     }
 
     function showModule(module){
-      // Oculta módulos listados
-      document.getElementById('modules').style.display = 'none';
+      // Oculta la lista de módulos
+      const modules = document.getElementById('modules');
+      if (modules) modules.style.display = 'none';
+
       // Oculta todo el contenido
       hideAllContents();
 
-      // Si es un módulo que carga una página externa, la cargamos
-      if(module === 'telefono'){
-        loadExternalPage('telefono.html','telefono-content');
-      } else if(module === 'telefonos-spf'){
-        // si deseas que telefonos-spf cargue otra página puedes cambiar la ruta
-        loadExternalPage('telefono.html','telefonos-spf-content');
+      // Carga externa solo para telefonos-spf
+      if (module === 'telefonos-spf') {
+        loadExternalPage('telefono.html', 'telefonos-spf-content');
       } else {
-        // Mostrar sección local existente
+        // Mostrar sección local (despacho, gde, lpu)
         const sec = document.getElementById(module + '-content');
-        if(sec) sec.style.display = 'block';
+        if (sec) sec.style.display = 'block';
       }
 
-      // mostrar botón volver
-      const b = document.querySelector('.back-btn');
-      if(b) b.style.display = 'block';
+      // Mostrar botón volver
+      const backBtn = document.querySelector('.back-btn');
+      if (backBtn) backBtn.style.display = 'block';
 
-      window.scrollTo({top:0, behavior:'smooth'});
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showHome(){
       // Mostrar módulos
       const modules = document.getElementById('modules');
-      if(modules) modules.style.display = 'flex';
-      // Ocultar todo contenido (incluidas dinámicas)
+      if (modules) modules.style.display = 'flex';
+
+      // Ocultar todo contenido (incluye telefonos-spf-content)
       hideAllContents();
+
       // Ocultar boton volver
-      const b = document.querySelector('.back-btn'); if(b) b.style.display = 'none';
-      window.scrollTo({top:0, behavior:'smooth'});
+      const backBtn = document.querySelector('.back-btn');
+      if (backBtn) backBtn.style.display = 'none';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Carga una página externa (HTML) dentro de una sección destino
     function loadExternalPage(path, targetId){
       fetch(path)
         .then(resp => {
-          if(!resp.ok) throw new Error('No se pudo cargar '+path);
+          if (!resp.ok) throw new Error('No se pudo cargar ' + path);
           return resp.text();
         })
         .then(html => {
           let target = document.getElementById(targetId);
-          if(!target){
+          if (!target) {
+            // crear la sección si no existe (mantiene la clase content para showHome)
             target = document.createElement('section');
             target.className = 'content';
             target.id = targetId;
@@ -154,7 +154,7 @@
         .catch(err => {
           console.error(err);
           let target = document.getElementById(targetId);
-          if(!target){
+          if (!target) {
             target = document.createElement('section');
             target.className = 'content';
             target.id = targetId;
@@ -165,9 +165,10 @@
         });
     }
 
-    // Inicialmente ocultar contenidos y back
+    // Inicialización: ocultar contenidos y back btn
     hideAllContents();
-    document.querySelector('.back-btn').style.display = 'none';
+    const backBtnInit = document.querySelector('.back-btn');
+    if (backBtnInit) backBtnInit.style.display = 'none';
   </script>
 </body>
 </html>
