@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Módulo Teléfono</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 8px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button.eliminar {
+      background-color: #f44336;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <h2>Módulo Teléfono</h2>
+  <div id="telefono-crud">
+    <!-- Aquí se mostrará la tabla y el formulario CRUD -->
+  </div>
+
+  <script>
+    let telefonos = []; // Array para almacenar los datos de los teléfonos
+
+    // Función para cargar los datos del XML al array "telefonos"
+    function cargarTelefonos() {
+      fetch('telefonos/telefonosspf.xml')
+        .then(response => response.text())
+        .then(xmlString => {
+          const parser = new DOMParser();
+          const xml = parser.parseFromString(xmlString, 'text/xml');
+          const telefonosXml = xml.getElementsByTagName('telefono');
+
+          telefonos = Array.from(telefonosXml).map(telefono => ({
+            id: parseInt(telefono.getElementsByTagName('id')[0].textContent),
+            nombre: telefono.getElementsByTagName('nombre')[0].textContent,
+            numero: telefono.getElementsByTagName('numero')[0].textContent
+          }));
+
+          renderizarTabla();
+        })
+        .catch(error => {
+          console.error('Error al cargar los teléfonos desde el XML:', error);
+          document.getElementById('telefono-crud').innerHTML = '<p>Error al cargar los datos.</p>';
+        });
+    }
+
+    // Función para renderizar la tabla de teléfonos
+    function renderizarTabla() {
+      let html = `
+        <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+          <thead>
+            <tr style="background-color:#f2f2f2;">
+              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Nombre</th>
+              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Número</th>
+              <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      telefonos.forEach(telefono => {
+        html += `
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">${telefono.nombre}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${telefono.numero}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">
+              <button onclick="editarTelefono(${telefono.id})" style="background-color:#4CAF50; color:white; padding:5px 10px; border:none; cursor:pointer;">Editar</button>
+              <button onclick="eliminarTelefono(${telefono.id})" style="background-color:#f44336; color:white; padding:5px 10px; border:none; cursor:pointer;" class="eliminar">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+
+        <h3>Agregar/Editar Teléfono</h3>
+        <form id="telefono-form">
+          <input type="hidden" id="telefono-id">
+          <label for="nombre" style="display:block; margin-bottom:5px;">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" style="width:100%; padding:8px; margin-bottom:10px; box-sizing:border-box;">
+          <label for="numero" style="display:block; margin-bottom:5px;">Número:</label>
+          <input type="text" id="numero" name="numero" style="width:100%; padding:8px; margin-bottom:10px; box-sizing:border-box;">
+          <button type="submit" style="background-color:#008CBA; color:white; padding:10px 20px; border:none; cursor:pointer;">Guardar</button>
+        </form>
+      `;
+
+      document.getElementById('telefono-crud').innerHTML = html;
+
+      // Event listener para el formulario
+      document.getElementById('telefono-form').addEventListener('submit', guardarTelefono);
+    }
+
+    // Función para agregar o editar un teléfono
+    function guardarTelefono(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('telefono-id').value;
+      const nombre = document.getElementById('nombre').value;
+      const numero = document.getElementById('numero').value;
+
+      if (id) {
+        // Editar teléfono existente
+        const telefonoIndex = telefonos.findIndex(telefono => telefono.id === parseInt(id));
+        if (telefonoIndex !== -1) {
+          telefonos[telefonoIndex] = { id: parseInt(id), nombre, numero };
+        }
+      } else {
+        // Agregar nuevo teléfono
+        const newId = telefonos.length > 0 ? Math.max(...telefonos.map(t => t.id)) + 1 : 1;
+        telefonos.push({ id: newId, nombre, numero });
+      }
+
+      // Limpiar el formulario
+      document.getElementById('telefono-form').reset();
+      document.getElementById('telefono-id').value = '';
+
+      renderizarTabla();
+    }
+
+    // Función para cargar los datos de un teléfono en el formulario de edición
+    function editarTelefono(id) {
+      const telefono = telefonos.find(telefono => telefono.id === id);
+      if (telefono) {
+        document.getElementById('telefono-id').value = telefono.id;
+        document.getElementById('nombre').value = telefono.nombre;
+        document.getElementById('numero').value = telefono.numero;
+      }
+    }
+
+    // Función para eliminar un teléfono
+    function eliminarTelefono(id) {
+      telefonos = telefonos.filter(telefono => telefono.id !== id);
+      renderizarTabla();
+    }
+
+    // Cargar los datos al cargar la página
+    window.onload = cargarTelefonos;
+  </script>
+  <style>
+  </style>
+</body>
+</html>

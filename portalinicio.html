@@ -126,6 +126,10 @@
         <img class="module-tower" src="img/spf_favicon.png" alt="Torreón">
         <span class="module-label">Lpu</span>
       </button>
+      <button class="module-btn" onclick="showModule('telefonos-spf')">
+        <img class="module-tower" src="img/spf_favicon" alt="Teléfonos SPF">
+        <span class="module-label">Teléfonos SPF</span>
+      </button>
     </section>
 
     <section class="content" id="despacho-content">
@@ -169,23 +173,60 @@
     </section>
   </main>
 
-  <script>
-    const moduleIds = ["despacho", "gde", "lpu"];
-    function showModule(module) {
-      document.getElementById("modules").style.display = "none";
-      moduleIds.forEach(id => {
-        document.getElementById(id+"-content").style.display = (id === module) ? "block" : "none";
-      });
-      document.querySelector(".back-btn").style.display = "block";
+<script>
+const moduleIds = ["despacho", "gde", "lpu", "telefono", "telefonos-spf"]; // Agrega "telefonos-spf" a la lista de módulos
+
+function showModule(module) {
+  document.getElementById("modules").style.display = "none";
+
+  moduleIds.forEach(id => {
+    const contentElement = document.getElementById(id + "-content");
+    if (contentElement) {
+      contentElement.style.display = (id === module) ? "block" : "none";
     }
-    function showHome() {
-      document.getElementById("modules").style.display = "flex";
+  });
+
+  // Cargar telefono.html si el módulo es "telefonos-spf"
+  if (module === 'telefonos-spf') {
+    loadTelefonoSPF();
+  }
+
+  document.querySelector(".back-btn").style.display = "block";
+}
+
+function loadTelefonoSPF() {
+  fetch('telefono.html')
+    .then(response => response.text())
+    .then(html => {
+      const telefonoContent = document.getElementById('telefonos-spf-content');
+      if (!telefonoContent) {
+        // Si no existe el elemento, créalo
+        const newSection = document.createElement('section');
+        newSection.className = 'content';
+        newSection.id = 'telefonos-spf-content';
+        newSection.innerHTML = html;
+        document.querySelector('main').appendChild(newSection);
+      } else {
+        // Si ya existe, actualiza su contenido
+        telefonoContent.innerHTML = html;
+        telefonoContent.style.display = 'block';
+      }
+
+      // Asegúrate de ocultar los otros contenidos
       moduleIds.forEach(id => {
-        document.getElementById(id+"-content").style.display = "none";
+        if (id !== 'telefonos-spf') {
+          const contentElement = document.getElementById(id + "-content");
+          if (contentElement) {
+            contentElement.style.display = 'none';
+          }
+        }
       });
-      document.querySelector(".back-btn").style.display = "none";
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
-  </script>
+    })
+    .catch(error => {
+      console.error('Error al cargar telefono.html:', error);
+      document.getElementById('telefonos-spf-content').innerHTML = '<p>Error al cargar el contenido.</p>';
+    });
+  }
+</script>
 </body>
 </html>

@@ -1,0 +1,12 @@
+<telefonos>
+  <telefono>
+    <id>1</id>
+    <nombre>Juan Pérez</nombre>
+    <numero>123-456-7890</numero>
+  </telefono>
+  <telefono>
+    <id>2</id>
+    <nombre>María García</nombre>
+    <numero>987-654-3210</numero>
+  </telefono>
+</telefonos>
