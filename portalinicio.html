@@ -174,59 +174,89 @@
   </main>
 
 <script>
-const moduleIds = ["despacho", "gde", "lpu", "telefono", "telefonos-spf"]; // Agrega "telefonos-spf" a la lista de módulos
+const moduleIds = ["despacho", "gde", "lpu", "telefono", "telefonos-spf"];
 
+// Muestra el módulo solicitado y oculta los otros contenidos
 function showModule(module) {
+  // Oculta la lista de módulos
   document.getElementById("modules").style.display = "none";
 
-  moduleIds.forEach(id => {
-    const contentElement = document.getElementById(id + "-content");
-    if (contentElement) {
-      contentElement.style.display = (id === module) ? "block" : "none";
-    }
+  // Oculta todas las secciones .content primero
+  document.querySelectorAll('.content').forEach(el => {
+    el.style.display = 'none';
   });
 
-  // Cargar telefono.html si el módulo es "telefonos-spf"
+  // Muestra la sección correspondiente (si existe)
+  const target = document.getElementById(module + '-content');
+  if (target) {
+    target.style.display = 'block';
+  }
+
+  // Si es el módulo que carga una página externa, cargarla
   if (module === 'telefonos-spf') {
     loadTelefonoSPF();
   }
 
-  document.querySelector(".back-btn").style.display = "block";
+  // Muestra el botón de volver
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn) backBtn.style.display = 'block';
+
+  // Lleva al tope de la vista
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Vuelve a la pantalla de módulos: muestra #modules y oculta todo lo demás
+function showHome() {
+  // Mostrar la lista de módulos
+  const modules = document.getElementById('modules');
+  if (modules) modules.style.display = 'flex';
+
+  // Ocultar todas las secciones de contenido (incluye las creadas dinámicamente)
+  document.querySelectorAll('.content').forEach(el => {
+    el.style.display = 'none';
+  });
+
+  // Ocultar botón volver
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn) backBtn.style.display = 'none';
+
+  // Opcional: limpiar la URL hash o cualquier estado visual
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Función que carga telefono.html dentro de la sección telefonos-spf-content
 function loadTelefonoSPF() {
   fetch('telefono.html')
-    .then(response => response.text())
-    .then(html => {
-      const telefonoContent = document.getElementById('telefonos-spf-content');
-      if (!telefonoContent) {
-        // Si no existe el elemento, créalo
-        const newSection = document.createElement('section');
-        newSection.className = 'content';
-        newSection.id = 'telefonos-spf-content';
-        newSection.innerHTML = html;
-        document.querySelector('main').appendChild(newSection);
-      } else {
-        // Si ya existe, actualiza su contenido
-        telefonoContent.innerHTML = html;
-        telefonoContent.style.display = 'block';
-      }
-
-      // Asegúrate de ocultar los otros contenidos
-      moduleIds.forEach(id => {
-        if (id !== 'telefonos-spf') {
-          const contentElement = document.getElementById(id + "-content");
-          if (contentElement) {
-            contentElement.style.display = 'none';
-          }
-        }
-      });
+    .then(response => {
+      if (!response.ok) throw new Error('No se pudo cargar telefono.html');
+      return response.text();
     })
-    .catch(error => {
-      console.error('Error al cargar telefono.html:', error);
-      document.getElementById('telefonos-spf-content').innerHTML = '<p>Error al cargar el contenido.</p>';
+    .then(html => {
+      let telefonoContent = document.getElementById('telefonos-spf-content');
+
+      if (!telefonoContent) {
+        // Crear la sección con clase "content" para que showHome() la oculte
+        telefonoContent = document.createElement('section');
+        telefonoContent.className = 'content';
+        telefonoContent.id = 'telefonos-spf-content';
+        document.querySelector('main').appendChild(telefonoContent);
+      }
+      telefonoContent.innerHTML = html;
+      telefonoContent.style.display = 'block';
+    })
+    .catch(err => {
+      console.error(err);
+      let telefonoContent = document.getElementById('telefonos-spf-content');
+      if (!telefonoContent) {
+        telefonoContent = document.createElement('section');
+        telefonoContent.className = 'content';
+        telefonoContent.id = 'telefonos-spf-content';
+        document.querySelector('main').appendChild(telefonoContent);
+      }
+      telefonoContent.innerHTML = '<p>Error al cargar el contenido de Teléfonos SPF.</p>';
+      telefonoContent.style.display = 'block';
     });
-  }
+}
 </script>
 </body>
 </html>
