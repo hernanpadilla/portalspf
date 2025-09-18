@@ -1,262 +1,173 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <link href="img/spf_favicon.png" rel="icon">
+  <meta charset="utf-8" />
   <title>Portal de Módulos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body {
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-      background: #eee;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      text-align: center;
-      background: #254d79;
-      color: #fff;
-      padding: 30px 0 10px 0;
-    }
-    h1 {
-      margin: 0;
-      font-size: 2.2em;
-      letter-spacing: 3px;
-    }
-    .modules {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      padding: 40px 0;
-      gap: 32px;
-    }
-    .module-btn {
-      background: #fff;
-      border: 1px solid #bbb;
-      border-radius: 12px;
-      min-width: 200px;
-      min-height: 110px;
-      box-shadow: 0 4px 18px #0e427a15;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      padding: 16px 22px;
-      transition: box-shadow .2s, transform .2s;
-      position: relative;
-    }
-    .module-btn:hover {
-      box-shadow: 0 4px 30px #0e224a33;
-      transform: translateY(-4px) scale(1.025);
-      border-color: #409;
-    }
-    .module-tower {
-      width: 46px;
-      height: 60px;
-      margin-bottom: 8px;
-      display: block;
-      object-fit: contain;
-      /* Center IMG */
-      align-self: center;
-    }
-    .module-label {
-      font-size: 1.15em;
-      font-weight: bold;
-      color: #133356;
-      text-align: center;
-    }
-    .back-btn {
-      position: fixed;
-      top: 18px;
-      left: 10px;
-      background: #dde3f4;
-      color: #223c60;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 18px;
-      font-size: 1.1em;
-      cursor: pointer;
-      display: none;
-      z-index: 10;
-      box-shadow: 0 2px 8px #254d7922;
-    }
-    .content {
-      max-width: 720px;
-      margin: 35px auto;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 2px 12px #2a3b6217;
-      padding: 36px;
-      color: #233652;
-      min-height: 200px;
-      display: none;
-      font-size: 1.15em;
-    }
-    @media (max-width: 750px) {
-      .modules {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px 0 20px 0;
-      }
-      .content { padding: 18px; min-height: 130px;}
-    }
+    body{font-family:Verdana, Geneva, Tahoma, sans-serif;background:#eee;margin:0}
+    header{text-align:center;background:#254d79;color:#fff;padding:28px 0}
+    h1{margin:0;font-size:2em;letter-spacing:2px}
+    .modules{display:flex;justify-content:center;flex-wrap:wrap;padding:36px;gap:24px}
+    .module-btn{background:#fff;border:1px solid #bbb;border-radius:12px;min-width:180px;min-height:100px;
+      box-shadow:0 4px 18px #0e427a15;cursor:pointer;display:flex;align-items:center;flex-direction:column;padding:14px 18px;transition:.18s}
+    .module-btn:hover{transform:translateY(-4px);box-shadow:0 6px 28px #0e224a33}
+    .module-tower{width:46px;height:46px;margin-bottom:8px;object-fit:contain}
+    .module-label{font-weight:700;color:#133356}
+    .back-btn{position:fixed;top:14px;left:10px;background:#dde3f4;color:#223c60;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;display:none;z-index:10}
+    .logout-btn{position:fixed;top:14px;right:10px;background:#e44;color:#fff;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;z-index:10}
+    main{max-width:1000px;margin:30px auto;padding:0 16px}
+    .content{display:none;background:#fff;padding:26px;border-radius:12px;box-shadow:0 2px 12px #2a3b6217}
+    @media(max-width:720px){.modules{flex-direction:column;align-items:center;padding:16px}}
   </style>
 </head>
 <body>
   <header>
     <h1>Portal de Módulos</h1>
-    <div style="font-size:1.18em;margin-top:6px;opacity:0.83;">
-      Selecciona un módulo para ingresar
-    </div>
+    <div style="opacity:.9;margin-top:6px">Selecciona un módulo</div>
   </header>
 
   <button class="back-btn" onclick="showHome()">← Volver a módulos</button>
-  
+  <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+
   <main>
-    <section class="modules" id="modules">
+    <section id="modules" class="modules">
       <button class="module-btn" onclick="showModule('despacho')">
-        <img class="module-tower" src="img/spf_favicon.png" alt="Torreón">
+        <img class="module-tower" src="img/spf_favicon" alt="Despacho">
         <span class="module-label">Despacho</span>
       </button>
+
       <button class="module-btn" onclick="showModule('gde')">
-        <img class="module-tower" src="img/spf_favicon.png" alt="Torreón">
+        <img class="module-tower" src="img/spf_favicon" alt="Gde">
         <span class="module-label">Gde</span>
       </button>
+
       <button class="module-btn" onclick="showModule('lpu')">
-        <img class="module-tower" src="img/spf_favicon.png" alt="Torreón">
+        <img class="module-tower" src="img/spf_favicon" alt="Lpu">
         <span class="module-label">Lpu</span>
       </button>
+
+      <button class="module-btn" onclick="showModule('telefono')">
+        <img class="module-tower" src="img/spf_favicon" alt="Teléfono">
+        <span class="module-label">Teléfono</span>
+      </button>
+
       <button class="module-btn" onclick="showModule('telefonos-spf')">
-        <img class="module-tower" src="img/spf_favicon.png" alt="Teléfonos SPF">
+        <img class="module-tower" src="img/spf_favicon" alt="Teléfonos SPF">
         <span class="module-label">Teléfonos SPF</span>
       </button>
     </section>
 
-    <section class="content" id="despacho-content">
+    <!-- Contenidos de módulos existentes (ejemplo mínimos) -->
+    <section id="despacho-content" class="content">
       <h2>Módulo Despacho</h2>
-      <p>
-        Aquí puedes acceder a todos los temas relacionados con <b>Despacho</b>.<br>
-        <br>
-        <b>Temas disponibles:</b>
-        <ul>
-          <li>Seguimiento de casos de despacho</li>
-          <li>Lista de tareas por usuario</li>
-          <li>Reportes mensuales</li>
-        </ul>
-      </p>
+      <p>Contenido de Despacho ...</p>
     </section>
-    <section class="content" id="gde-content">
+
+    <section id="gde-content" class="content">
       <h2>Módulo Gde</h2>
-      <p>
-        Este módulo reúne temas y recursos para <b>Gde</b>.<br>
-        <br>
-        <b>Temas disponibles:</b>
-        <ul>
-          <li>Gestión documental de expedientes</li>
-          <li>Normativa y plantillas</li>
-          <li>Procesos de aprobación</li>
-        </ul>
-      </p>
+      <p>Contenido de Gde ...</p>
     </section>
-    <section class="content" id="lpu-content">
+
+    <section id="lpu-content" class="content">
       <h2>Módulo Lpu</h2>
-      <p>
-        Accede a los recursos de <b>Lpu</b> para mejorar tu productividad.<br>
-        <br>
-        <b>Temas disponibles:</b>
-        <ul>
-          <li>Guía rápida de uso</li>
-          <li>Preguntas frecuentes</li>
-          <li>Soporte en línea</li>
-        </ul>
-      </p>
+      <p>Contenido de Lpu ...</p>
     </section>
+
+    <!-- Secciones destino para páginas externas -->
+    <section id="telefono-content" class="content"><!-- telefono.html se cargará aquí --></section>
+    <section id="telefonos-spf-content" class="content"><!-- telefono.html u otra página se cargará aquí --></section>
+
   </main>
 
-<script>
-const moduleIds = ["despacho", "gde", "lpu", "telefono", "telefonos-spf"];
+  <script>
+    // Comprobación de sesión (simple)
+    if (!localStorage.getItem('login_usuario')) {
+      window.location.href = 'login.html';
+    }
 
-// Muestra el módulo solicitado y oculta los otros contenidos
-function showModule(module) {
-  // Oculta la lista de módulos
-  document.getElementById("modules").style.display = "none";
+    function logout(){
+      localStorage.removeItem('login_usuario');
+      window.location.href='login.html';
+    }
 
-  // Oculta todas las secciones .content primero
-  document.querySelectorAll('.content').forEach(el => {
-    el.style.display = 'none';
-  });
+    const moduleIds = ['despacho','gde','lpu','telefono','telefonos-spf'];
 
-  // Muestra la sección correspondiente (si existe)
-  const target = document.getElementById(module + '-content');
-  if (target) {
-    target.style.display = 'block';
-  }
+    function hideAllContents(){
+      document.querySelectorAll('.content').forEach(c => c.style.display='none');
+    }
 
-  // Si es el módulo que carga una página externa, cargarla
-  if (module === 'telefonos-spf') {
-    loadTelefonoSPF();
-  }
+    function showModule(module){
+      // Oculta módulos listados
+      document.getElementById('modules').style.display = 'none';
+      // Oculta todo el contenido
+      hideAllContents();
 
-  // Muestra el botón de volver
-  const backBtn = document.querySelector('.back-btn');
-  if (backBtn) backBtn.style.display = 'block';
-
-  // Lleva al tope de la vista
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Vuelve a la pantalla de módulos: muestra #modules y oculta todo lo demás
-function showHome() {
-  // Mostrar la lista de módulos
-  const modules = document.getElementById('modules');
-  if (modules) modules.style.display = 'flex';
-
-  // Ocultar todas las secciones de contenido (incluye las creadas dinámicamente)
-  document.querySelectorAll('.content').forEach(el => {
-    el.style.display = 'none';
-  });
-
-  // Ocultar botón volver
-  const backBtn = document.querySelector('.back-btn');
-  if (backBtn) backBtn.style.display = 'none';
-
-  // Opcional: limpiar la URL hash o cualquier estado visual
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Función que carga telefono.html dentro de la sección telefonos-spf-content
-function loadTelefonoSPF() {
-  fetch('telefono.html')
-    .then(response => {
-      if (!response.ok) throw new Error('No se pudo cargar telefono.html');
-      return response.text();
-    })
-    .then(html => {
-      let telefonoContent = document.getElementById('telefonos-spf-content');
-
-      if (!telefonoContent) {
-        // Crear la sección con clase "content" para que showHome() la oculte
-        telefonoContent = document.createElement('section');
-        telefonoContent.className = 'content';
-        telefonoContent.id = 'telefonos-spf-content';
-        document.querySelector('main').appendChild(telefonoContent);
+      // Si es un módulo que carga una página externa, la cargamos
+      if(module === 'telefono'){
+        loadExternalPage('telefono.html','telefono-content');
+      } else if(module === 'telefonos-spf'){
+        // si deseas que telefonos-spf cargue otra página puedes cambiar la ruta
+        loadExternalPage('telefono.html','telefonos-spf-content');
+      } else {
+        // Mostrar sección local existente
+        const sec = document.getElementById(module + '-content');
+        if(sec) sec.style.display = 'block';
       }
-      telefonoContent.innerHTML = html;
-      telefonoContent.style.display = 'block';
-    })
-    .catch(err => {
-      console.error(err);
-      let telefonoContent = document.getElementById('telefonos-spf-content');
-      if (!telefonoContent) {
-        telefonoContent = document.createElement('section');
-        telefonoContent.className = 'content';
-        telefonoContent.id = 'telefonos-spf-content';
-        document.querySelector('main').appendChild(telefonoContent);
-      }
-      telefonoContent.innerHTML = '<p>Error al cargar el contenido de Teléfonos SPF.</p>';
-      telefonoContent.style.display = 'block';
-    });
-}
-</script>
+
+      // mostrar botón volver
+      const b = document.querySelector('.back-btn');
+      if(b) b.style.display = 'block';
+
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function showHome(){
+      // Mostrar módulos
+      const modules = document.getElementById('modules');
+      if(modules) modules.style.display = 'flex';
+      // Ocultar todo contenido (incluidas dinámicas)
+      hideAllContents();
+      // Ocultar boton volver
+      const b = document.querySelector('.back-btn'); if(b) b.style.display = 'none';
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    // Carga una página externa (HTML) dentro de una sección destino
+    function loadExternalPage(path, targetId){
+      fetch(path)
+        .then(resp => {
+          if(!resp.ok) throw new Error('No se pudo cargar '+path);
+          return resp.text();
+        })
+        .then(html => {
+          let target = document.getElementById(targetId);
+          if(!target){
+            target = document.createElement('section');
+            target.className = 'content';
+            target.id = targetId;
+            document.querySelector('main').appendChild(target);
+          }
+          target.innerHTML = html;
+          target.style.display = 'block';
+        })
+        .catch(err => {
+          console.error(err);
+          let target = document.getElementById(targetId);
+          if(!target){
+            target = document.createElement('section');
+            target.className = 'content';
+            target.id = targetId;
+            document.querySelector('main').appendChild(target);
+          }
+          target.innerHTML = '<p style="color:#c0392b">Error al cargar el contenido.</p>';
+          target.style.display = 'block';
+        });
+    }
+
+    // Inicialmente ocultar contenidos y back
+    hideAllContents();
+    document.querySelector('.back-btn').style.display = 'none';
+  </script>
 </body>
 </html>
